@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+
+<style>
+    body{
+        background-color: antiquewhite;
+    }
+
+    .main{
+        font-family: cursive;
+        height: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .calbody{
+        border-radius: 20px;
+        height: 480px;
+        width: 300px;
+        background-color: rgb(125, 125, 125);
+        padding: 20px;
+    }
+
+    #calscreen{
+        background: #3acc8685;
+        width: 100%;
+        height: 55px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        color: white;
+        font-size: 30px;
+        text-align: right;
+        padding-right: 5px;
+        line-height: 55px;
+        overflow: hidden; /* important for scrolling text */
+        white-space: nowrap;
+    }
+
+    /* Animation for moving text */
+    @keyframes moveText {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+
+    .scrolling {
+        display: inline-block;
+        animation: moveText 4s linear infinite;
+    }
+
+    .btns{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .btns button{
+        height: 60px;
+        border: none;
+        border-radius: 10px;
+        background-color: #222;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    
+    .btns button:hover{
+        background-color: #444;
+        transform: scale(1.05);
+    }
+    .confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    animation: fall 1s linear forwards;
+    border-radius: 2px;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(150px) rotate(360deg); opacity: 0; }
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="main">
+    <div class="calbody">
+
+        <div id="calscreen">0</div>
+
+        <div class="btns">
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>0</button>
+
+            <button>+</button>
+            <button>-</button>
+            <button>*</button>
+            <button>/</button>
+
+            <button>=</button>
+            <button id="del">⌫</button>
+            <button id="clear">AC</button>
+            <button id="special">special key</button>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+<script>
+
+    const buttons = document.querySelectorAll("button");
+    const Screen = document.querySelector("#calscreen");
+
+    let expression = "";
+
+    buttons.forEach(function(button){
+        button.addEventListener("click", function(e){
+
+            let value = e.target.innerText;
+
+            // SPECIAL KEY → scrolling text
+           if(e.target.id === "special"){
+    Screen.innerHTML = `<span class="scrolling">welcome to my site.</span>`;
+        return;
+}
+
+
+            // DELETE LAST DIGIT
+            if(e.target.id === "del"){
+                expression = expression.slice(0, -1);
+                Screen.innerHTML = expression || "0";
+                return;
+            }
+
+            // CLEAR SCREEN
+            if(e.target.id === "clear"){
+                expression = "";
+                Screen.innerHTML = "0";
+                return;
+            }
+
+            // EQUAL BUTTON
+            if(value === "="){
+                try {
+                    expression = eval(expression).toString();
+                } catch {
+                    expression = "Error";
+                }
+                Screen.innerHTML = expression;
+                return;
+            }
+
+            // NORMAL INPUT
+            if(Screen.innerHTML === "0" || Screen.innerHTML === "Error"){
+                Screen.innerHTML = value;
+            } else {
+                Screen.innerHTML += value;
+            }
+
+            expression += value;
+
+        });
+    });
+</script>
+
+</html>
